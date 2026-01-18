@@ -1,0 +1,202 @@
+/**
+ * @name MagixMaps Library CSS (LESS Source)
+ * @version 2.0
+ * @author Aurélien Gérits
+ */
+
+// Variables LESS internes (optionnelles, pointant vers les variables root)
+@transition: var(--mm-transition);
+@border-color: var(--mm-border-color);
+
+:root {
+  /* Couleurs */
+  --mm-main-color: #2c3e50;
+  --mm-text-on-main: #ffffff;
+  --mm-bg-panel: #ffffff;
+  --mm-text-color: #333333;
+  --mm-border-color: #dddddd;
+
+  /* Dimensions */
+  --mm-map-height: 600px;
+  --mm-panel-width: 400px;
+  --mm-form-height: 52px;
+  --mm-alert-height: 50px;
+
+  /* Animation */
+  --mm-transition: 0.35s ease;
+}
+
+#magix-maps-container {
+  position: relative;
+  width: 100%;
+  height: var(--mm-map-height);
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--mm-text-color);
+
+  .gmap3, #main-map {
+    width: 100%;
+    height: 100%;
+    background-color: #e5e3df;
+  }
+
+  #gmap-address {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: var(--mm-panel-width);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    pointer-events: none;
+    transition: transform @transition;
+
+    & > div, & > form, & > button {
+      pointer-events: auto;
+    }
+
+    &.open {
+      transform: translateX(0);
+    }
+
+    &:not(.open) {
+      transform: translateX(-100%);
+    }
+
+    .form-search {
+      background: var(--mm-bg-panel);
+      display: flex;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-bottom: 1px solid @border-color;
+
+      input {
+        flex: 1;
+        height: var(--mm-form-height);
+        border: none;
+        padding: 0 15px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .subdirection {
+        width: 60px;
+        height: var(--mm-form-height);
+        background: #f8f8f8;
+        border: none;
+        border-left: 1px solid @border-color;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.2s;
+
+        &:hover { background: #eeeeee; }
+      }
+    }
+
+    .alert {
+      background: var(--mm-main-color);
+      color: var(--mm-text-on-main);
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: var(--mm-alert-height);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+      #address {
+        font-size: 13px;
+        line-height: 1.4;
+        padding-right: 10px;
+      }
+
+      #showform {
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.4);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        text-transform: uppercase;
+
+        &:hover { background: rgba(255,255,255,0.3); }
+      }
+    }
+  }
+
+  .hidepanel {
+    position: absolute;
+    right: 0;
+    top: 25px;
+    transform: translateX(100%);
+    background: var(--mm-bg-panel);
+    border: 1px solid @border-color;
+    border-left: none;
+    padding: 12px 8px;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    border-radius: 0 4px 4px 0;
+
+    &::after {
+      content: '‹';
+      display: inline-block;
+      font-size: 20px;
+      line-height: 1;
+      transition: transform 0.3s;
+    }
+
+    &.open::after { transform: rotate(0deg); }
+    &:not(.open)::after { transform: rotate(180deg); }
+  }
+
+  #r-directions {
+    background: var(--mm-bg-panel);
+    overflow-y: auto;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height @transition, opacity @transition;
+
+    &.sizedirection {
+      max-height: 400px;
+      opacity: 1;
+      border-bottom: 2px solid @border-color;
+      padding: 10px;
+    }
+
+    .adp-list { margin: 0; padding: 0; }
+    .adp-step { padding: 10px 0; border-bottom: 1px solid #eee; }
+  }
+
+  .marker-custom-wrapper {
+    position: relative;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+
+    .marker-label {
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  #magix-maps-container {
+    #gmap-address {
+      max-width: 100%;
+      &:not(.open) { transform: translateY(-100%); }
+    }
+
+    .hidepanel {
+      top: auto;
+      bottom: -40px;
+      right: 50%;
+      transform: translateX(50%) rotate(90deg);
+      border: 1px solid @border-color;
+      border-radius: 4px;
+    }
+  }
+}

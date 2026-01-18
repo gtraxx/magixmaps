@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>MagixMaps - Carte Interactive</title>
+    <link rel="stylesheet" href="../dist/magixmaps.min.css">
+</head>
+<body>
+
+<div id="magix-maps-container">
+    <div id="main-map" data-map-id="DEMO_MAP_ID"></div>
+
+    <div id="gmap-address" class="open">
+        <form class="form-search">
+            <input type="text" id="getadress" placeholder="Votre adresse de départ...">
+            <button type="submit" class="subdirection">OK</button>
+        </form>
+
+        <div class="alert">
+            <div id="address">
+                <span class="address">Chargement...</span>, <span class="city"></span>
+            </div>
+            <button id="showform">Itinéraire</button>
+        </div>
+
+        <button class="hidepanel open">‹</button>
+        <div id="r-directions"></div>
+    </div>
+</div>
+
+<script src="../dist/magixmaps.js"></script>
+<script>
+    // Initialisation mode Front
+    /*new MagixMaps({
+        api_key: '',VOTRE_CLE_API
+        googleMapId: 'DEMO_MAP_ID',
+        markers: [
+            {
+                company: "Nom de l'entreprise",
+                address: "10 rue du Commerce",
+                city: "Paris",
+                lat: 48.85, lng: 2.35
+            }
+        ]
+    });*/
+    // Multi point
+    new MagixMaps({
+        api_key: '',//VOTRE_CLE_API
+        googleMapId: 'DEMO_MAP_ID',
+        markers: [
+            { company: "Bureau Huy", address: "Rue de la Station", city: "Huy", lat: 50.52, lng: 5.24 },
+            { company: "Bureau Liège", address: "Place Saint-Lambert", city: "Liège", lat: 50.64, lng: 5.57 },
+            { company: "Bureau Namur", address: "Place de la Station", city: "Namur", lat: 50.46, lng: 4.86 }
+        ]
+    });
+
+</script>
+</body>
+</html>

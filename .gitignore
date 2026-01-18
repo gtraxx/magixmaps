@@ -1,0 +1,26 @@
+# IDE - PhpStorm
+.idea/
+*.iml
+cmake-build-*/
+
+# OS - macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Node / Build tools
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.eslintcache
+
+# Fichiers de log
+*.log
+
+# Dossiers temporaires
+.tmp/
+.cache/

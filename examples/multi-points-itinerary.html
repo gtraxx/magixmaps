@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagixMaps - Itinéraire Multi-points</title>
+
+    <link rel="stylesheet" href="../dist/magixmaps.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f6f7;
+            font-family: sans-serif;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            margin-bottom: 20px;
+        }
+        .instructions {
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #2c3e50;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Points de vente MagixMaps</h1>
+        <p>Sélectionnez un point sur la carte pour voir l'adresse et calculer votre itinéraire.</p>
+    </header>
+
+    <div class="instructions">
+        <strong>Mode d'emploi :</strong> Cliquez sur un marqueur pour mettre à jour le panneau, puis saisissez votre ville de départ.
+    </div>
+
+    <div id="magix-maps-container">
+        <div id="main-map" data-map-id="VOTRE_MAP_ID_GOOGLE"></div>
+
+        <div id="gmap-address" class="open">
+            <form class="form-search">
+                <input type="text" id="getadress" placeholder="Votre ville de départ...">
+                <button type="submit" class="subdirection">OK</button>
+            </form>
+
+            <div class="alert">
+                <div id="address">
+                    <span class="address">Sélectionnez un magasin</span>,
+                    <span class="city"></span>
+                </div>
+                <button id="showform">Itinéraire</button>
+            </div>
+
+            <button class="hidepanel open"></button>
+            <div id="r-directions"></div>
+        </div>
+    </div>
+</div>
+
+<script src="../dist/magixmaps.js"></script>
+
+<script>
+    // Configuration avec plusieurs points de vente
+    const mapConfig = {
+        api_key: '',//VOTRE_CLE_API_REELLE
+        lang: 'fr',
+        zoom: 8,
+        markers: [
+            {
+                company: "Magix Huy",
+                address: "Rue de la Station",
+                postcode: "4500",
+                city: "Huy",
+                lat: 50.52,
+                lng: 5.24
+            },
+            {
+                company: "Magix Liège",
+                address: "Place Saint-Lambert",
+                postcode: "4000",
+                city: "Liège",
+                lat: 50.64,
+                lng: 5.57
+            },
+            {
+                company: "Magix Namur",
+                address: "Place de la Station",
+                postcode: "5000",
+                city: "Namur",
+                lat: 50.46,
+                lng: 4.86
+            }
+        ]
+    };
+
+    // Initialisation
+    const myMap = new MagixMaps(mapConfig);
+</script>
+
+</body>
+</html>
