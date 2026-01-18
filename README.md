@@ -43,6 +43,7 @@ Utilisé pour afficher des points géographiques avec moteur de calcul d'itinér
 ```javascript
 const map = new MagixMaps({
     api_key: 'VOTRE_CLE_API_GOOGLE',
+    googleMapId: 'DEMO_MAP_ID',
     lang: 'fr',
     zoom: 15,
     markers: [
@@ -64,6 +65,7 @@ const map = new MagixMaps({
 ```javascript
 new MagixMaps({
     api_key: 'VOTRE_CLE_API_GOOGLE',
+    googleMapId: 'DEMO_MAP_ID',
     adminFields: {
         street: document.querySelector('.input-rue'),
         postcode: document.querySelector('.input-cp'),
