@@ -5,6 +5,10 @@ MagixMaps est une bibliothèque JavaScript légère, performante et sans dépend
 
 Initialement développée pour le système Magix CMS, cette version a été isolée et optimisée pour une utilisation universelle. Elle est compatible avec tous les environnements (sites statiques, PHP, frameworks JS) sans modification du noyau de la bibliothèque.
 
+### version
+
+[![release](https://img.shields.io/github/release/gtraxx/magixmaps.svg)](https://github.com/gtraxx/magixmaps/releases/latest)
+
 ---
 
 ## Caractéristiques techniques
