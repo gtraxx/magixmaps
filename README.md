@@ -1,4 +1,5 @@
 # MagixMaps Library
+![Image](https://github.com/user-attachments/assets/a765cf46-a556-4421-9b38-f093f502f03f)
 
 MagixMaps est une bibliothèque JavaScript légère, performante et sans dépendances (Vanilla JS), conçue pour intégrer l'API Google Maps (version 2026) dans tout projet web.
 
