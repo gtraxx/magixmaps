@@ -26,7 +26,7 @@ Pour utiliser MagixMaps, vous devez disposer d'un projet actif sur la Google Clo
 * API Key : Activez "Maps JavaScript API" et générez une clé API.
 * Map ID (googleMapId) : Pour profiter des Advanced Markers (marqueurs personnalisés et performants), vous devez créer un Map ID dans votre console Google Cloud (configuré sur le type de plateforme "JavaScript") et l'associer à votre carte.
 
-Restrictions : Pour la mise en production, n'oubliez pas de restreindre votre clé API à votre nom de domaine (gerits-aurelien.be par exemple) afin d'éviter toute utilisation non autorisée.
+Restrictions : Pour la mise en production, n'oubliez pas de restreindre votre clé API à votre nom de domaine (my-domain.tld par exemple) afin d'éviter toute utilisation non autorisée.
 
 ## Installation
 
