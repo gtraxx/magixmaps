@@ -8,6 +8,7 @@ Initialement développée pour le système Magix CMS, cette version a été isol
 ### version
 
 [![release](https://img.shields.io/github/release/gtraxx/magixmaps.svg)](https://github.com/gtraxx/magixmaps/releases/latest)
+![License](https://img.shields.io/badge/license-MIT%20%2F%20GPL%20v3-blue)
 
 ---
 
