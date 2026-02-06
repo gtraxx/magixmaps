@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagixMaps - Galerie d'Exemples</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #2c3e50; }
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav>
+        <ul>
+            <li><strong>MagixMaps</strong></li>
+        </ul>
+        <ul>
+            <li><a href="../index.html" class="secondary">← Retour à l'accueil</a></li>
+        </ul>
+    </nav>
+
+    <header style="text-align: center; margin-bottom: 3rem;">
+        <h1>Galerie d'Exemples</h1>
+        <p>Découvrez les différentes facettes de la bibliothèque à travers ces cas d'utilisation concrets.</p>
+    </header>
+
+    <main class="example-grid">
+
+        <article class="card">
+            <div style="text-align: center;">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Carte Interactive</h3>
+                <p>Affichage simple d'un point de vente avec calcul d'itinéraire vers l'adresse principale.</p>
+            </div>
+            <footer>
+                <a href="interactive-map.html" role="button" class="outline w-100">Voir la démo</a>
+            </footer>
+        </article>
+
+        <article class="card">
+            <div style="text-align: center;">
+                <i class="fas fa-layer-group"></i>
+                <h3>Multi-points & Zoom</h3>
+                <p>Gestion d'un réseau de magasins. La carte ajuste automatiquement sa vue (fitBounds) pour inclure tous les points.</p>
+            </div>
+            <footer>
+                <a href="multi-points-itinerary.html" role="button" class="outline w-100">Voir la démo</a>
+            </footer>
+        </article>
+
+        <article class="card">
+            <div style="text-align: center;">
+                <i class="fas fa-magic"></i>
+                <h3>Géocodage Admin</h3>
+                <p>Utilitaire de détection automatique. Idéal pour remplir des champs Latitude/Longitude lors de la saisie d'un formulaire.</p>
+            </div>
+            <footer>
+                <a href="admin-geocoding.html" role="button" class="outline w-100">Voir la démo</a>
+            </footer>
+        </article>
+
+    </main>
+
+    <footer style="margin-top: 5rem; text-align: center; opacity: 0.6;">
+        <p><small>MagixMaps - Bibliothèque Open Source par Aurélien Gérits</small></p>
+    </footer>
+</div>
+
+</body>
+</html>

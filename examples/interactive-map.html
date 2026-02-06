@@ -1,59 +1,52 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <title>MagixMaps - Carte Interactive</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <link rel="stylesheet" href="../dist/magixmaps.min.css">
+    <style>
+        :root { --mm-main-color: #2c3e50; --mm-map-height: 450px; }
+    </style>
 </head>
 <body>
+<div class="container">
+    <nav>
+        <ul><li><strong>MagixMaps Basic</strong></li></ul>
+        <ul>
+            <li><a href="../index.html" class="secondary">← Accueil</a></li>
+        </ul>
+    </nav>
 
-<div id="magix-maps-container">
-    <div id="main-map" data-map-id="DEMO_MAP_ID"></div>
-
-    <div id="gmap-address" class="open">
-        <form class="form-search">
-            <input type="text" id="getadress" placeholder="Votre adresse de départ...">
-            <button type="submit" class="subdirection">OK</button>
-        </form>
-
-        <div class="alert">
-            <div id="address">
-                <span class="address">Chargement...</span>, <span class="city"></span>
+    <article id="magix-maps-container">
+        <div id="main-map" data-map-id="DEMO_MAP_ID"></div>
+        <div id="gmap-address" class="open">
+            <form class="form-search" style="display:flex; gap:5px;">
+                <input type="text" id="getadress" placeholder="Départ...">
+                <button type="submit" style="width:auto;">OK</button>
+            </form>
+            <div class="alert">
+                <div id="address"><span class="address">Chargement...</span>, <span class="city"></span></div>
             </div>
-            <button id="showform">Itinéraire</button>
+            <div id="r-directions"></div>
         </div>
+    </article>
 
-        <button class="hidepanel open">‹</button>
-        <div id="r-directions"></div>
-    </div>
+    <h3>Configuration</h3>
+    <pre><code class="language-javascript">const map = new MagixMaps({
+    api_key: 'VOTRE_CLE',
+    markers: [{ company: "Magix Office", lat: 50.52, lng: 5.24 }]
+});</code></pre>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="../dist/magixmaps.js"></script>
 <script>
-    // Initialisation mode Front
-    /*new MagixMaps({
-        api_key: '',VOTRE_CLE_API
-        googleMapId: 'DEMO_MAP_ID',
-        markers: [
-            {
-                company: "Nom de l'entreprise",
-                address: "10 rue du Commerce",
-                city: "Paris",
-                lat: 48.85, lng: 2.35
-            }
-        ]
-    });*/
-    // Multi point
     new MagixMaps({
-        api_key: '',//VOTRE_CLE_API
-        googleMapId: 'DEMO_MAP_ID',
-        markers: [
-            { company: "Bureau Huy", address: "Rue de la Station", city: "Huy", lat: 50.52, lng: 5.24 },
-            { company: "Bureau Liège", address: "Place Saint-Lambert", city: "Liège", lat: 50.64, lng: 5.57 },
-            { company: "Bureau Namur", address: "Place de la Station", city: "Namur", lat: 50.46, lng: 4.86 }
-        ]
+        api_key: '',
+        markers: [{ company: "Magix Office", address: "Rue de la Station", city: "Huy", lat: 50.52, lng: 5.24 }]
     });
-
 </script>
 </body>
 </html>

@@ -1,35 +1,60 @@
 /**
  * @copyright MAGIX CMS Copyright (c) 2008-2026 Gerits Aurelien
- * @version 2.0
+ * @version 2.2 (Final - Sanitized & Destructible)
  * @name MagixMaps
  * @license Dual licensed under the MIT or GPL Version 3 licenses.
  */
 class MagixMaps {
     constructor(config) {
-        // Fusion des options par défaut avec la configuration utilisateur
+        // 1. Fusion et options par défaut
         this.config = {
             mapId: 'main-map',
             googleMapId: 'DEMO_MAP_ID',
             lang: 'fr',
             zoom: 15,
             markers: [],
-            adminFields: null, // Sera un objet si on est en mode admin
+            adminFields: null,
             ...config
         };
 
+        // 2. Nettoyage immédiat des données
+        this.sanitizeData();
+
+        // Initialisation des propriétés internes
         this.instance = null;
-        this.libs = {}; // Stockage des librairies Google chargées
+        this.libs = {};
         this.markers = [];
+        this.routeFlags = [];
         this.directionsRenderer = null;
         this.activeInfoWindow = null;
         this.timer = null;
+        this.eventListeners = []; // Pour le nettoyage futur
 
-        // On lance le bootstrap Google
+        // 3. Lancement du chargement
         this.bootstrap();
     }
 
     /**
-     * Chargement du script Google Maps via le Loader moderne
+     * Nettoyage et validation des coordonnées (virgules, strings, NaN)
+     */
+    sanitizeData() {
+        if (!this.config.markers || !Array.isArray(this.config.markers)) return;
+
+        this.config.markers = this.config.markers
+            .map(m => {
+                const cleanLat = parseFloat(String(m.lat).replace(',', '.'));
+                const cleanLng = parseFloat(String(m.lng).replace(',', '.'));
+                return { ...m, lat: cleanLat, lng: cleanLng };
+            })
+            .filter(m => !isNaN(m.lat) && !isNaN(m.lng));
+
+        if (this.config.markers.length === 0 && !this.config.adminFields) {
+            console.warn("MagixMaps: Aucun marqueur valide trouvé.");
+        }
+    }
+
+    /**
+     * Chargement asynchrone de l'API Google Maps
      */
     bootstrap() {
         ((g) => {
@@ -48,24 +73,18 @@ class MagixMaps {
         this.init();
     }
 
-    /**
-     * Initialisation des librairies et des modes
-     */
     async init() {
         try {
-            // Chargement parallèle des modules nécessaires
             this.libs.maps = await google.maps.importLibrary("maps");
             this.libs.marker = await google.maps.importLibrary("marker");
             this.libs.routes = await google.maps.importLibrary("routes");
             this.libs.geocoding = await google.maps.importLibrary("geocoding");
             this.libs.core = await google.maps.importLibrary("core");
 
-            // Si le conteneur de carte existe
             if (document.getElementById(this.config.mapId)) {
                 this.setupMap();
             }
 
-            // Si des champs de détection sont configurés
             if (this.config.adminFields) {
                 this.setupAdminWatcher();
             }
@@ -93,9 +112,8 @@ class MagixMaps {
         const bounds = new this.libs.core.LatLngBounds();
 
         this.config.markers.forEach((m, index) => {
-            const pos = { lat: parseFloat(m.lat), lng: parseFloat(m.lng) };
+            const pos = { lat: m.lat, lng: m.lng };
 
-            // Utilisation des nouveaux Advanced Markers
             const marker = new this.libs.marker.AdvancedMarkerElement({
                 map: this.instance,
                 position: pos,
@@ -103,7 +121,6 @@ class MagixMaps {
                 content: this.createMarkerIcon(index + 1)
             });
 
-            // On vérifie si postcode existe, sinon on met une chaîne vide
             const cp = m.postcode ? m.postcode + ' ' : '';
             const contentString = `<strong>${m.company}</strong><br>${m.address}<br>${cp}${m.city}`;
             const infowindow = new google.maps.InfoWindow({ content: contentString });
@@ -119,18 +136,15 @@ class MagixMaps {
             bounds.extend(pos);
         });
 
-        // Protection zoom infini
         if (this.markers.length > 1) {
             this.instance.fitBounds(bounds);
         } else if (this.markers.length === 1) {
             this.instance.setCenter(this.markers[0].position);
             this.instance.setZoom(this.config.zoom);
         }
-        if (this.config.markers.length > 0) {
-            // On remplit le panneau avec les infos du premier marqueur
-            this.updateAddressPanel(this.config.markers[0]);
 
-            // On ouvre aussi sa bulle d'info (InfoWindow)
+        if (this.config.markers.length > 0) {
+            this.updateAddressPanel(this.config.markers[0]);
             google.maps.event.trigger(this.markers[0], 'click');
         }
     }
@@ -138,14 +152,11 @@ class MagixMaps {
     createMarkerIcon(label, color = 'main') {
         const container = document.createElement("div");
         container.className = "marker-custom-wrapper";
-
-        // On passe le paramètre color au script PHP de génération d'image
         const iconUrl = `/${this.config.lang}/gmap/?marker=${color}&dotless=true`;
-
         container.innerHTML = `
-        <img src="${iconUrl}" style="display:block;">
-        <span class="marker-label" style="position:absolute; top:12px; left:50%; transform:translateX(-50%); color:white; font-weight:bold; font-size:12px;">${label}</span>
-    `;
+            <img src="${iconUrl}" style="display:block;">
+            <span class="marker-label" style="position:absolute; top:12px; left:50%; transform:translateX(-50%); color:white; font-weight:bold; font-size:12px;">${label}</span>
+        `;
         return container;
     }
 
@@ -153,24 +164,21 @@ class MagixMaps {
         if (!origin) return;
         const service = new this.libs.routes.DirectionsService();
 
-        // Nettoyage des anciens drapeaux s'ils existent
-        if (this.routeFlags) {
-            this.routeFlags.forEach(f => f.map = null);
-        }
+        if (this.routeFlags) this.routeFlags.forEach(f => f.map = null);
         this.routeFlags = [];
 
         if (!this.directionsRenderer) {
             this.directionsRenderer = new this.libs.routes.DirectionsRenderer({
                 map: this.instance,
                 panel: document.getElementById('r-directions'),
-                suppressMarkers: true // On cache les marqueurs A/B par défaut de Google
+                suppressMarkers: true
             });
         }
 
         try {
             const result = await service.route({
                 origin: origin,
-                destination: this.markers[0].position, // On vise le premier marqueur
+                destination: this.markers[0].position,
                 travelMode: google.maps.TravelMode.DRIVING
             });
 
@@ -180,56 +188,52 @@ class MagixMaps {
             const markerA = new this.libs.marker.AdvancedMarkerElement({
                 map: this.instance,
                 position: leg.start_location,
-                content: this.createMarkerIcon('A', 'grey') // Couleur grise pour le départ
+                content: this.createMarkerIcon('A', 'grey')
             });
 
             const markerB = new this.libs.marker.AdvancedMarkerElement({
                 map: this.instance,
                 position: leg.end_location,
-                content: this.createMarkerIcon('B', 'main') // Couleur pour l'arrivée
+                content: this.createMarkerIcon('B', 'main')
             });
 
-            // On stocke ces marqueurs pour pouvoir les effacer plus tard
             this.routeFlags.push(markerA, markerB);
-
-            // Ajustement automatique de la vue pour voir tout l'itinéraire
             const bounds = new this.libs.core.LatLngBounds();
             bounds.extend(leg.start_location);
             bounds.extend(leg.end_location);
             this.instance.fitBounds(bounds);
-
             document.getElementById('r-directions').classList.add('sizedirection');
-
         } catch (e) {
-            alert("Désolé, nous n'avons pas trouvé d'itinéraire pour cette adresse.");
+            alert("Itinéraire introuvable.");
         }
     }
 
     setupUIEvents() {
-        // Toggle du panneau
         const hideBtn = document.querySelector('.hidepanel');
         if (hideBtn) {
-            hideBtn.addEventListener('click', () => {
+            const toggleFn = () => {
                 document.getElementById('gmap-address').classList.toggle('open');
                 hideBtn.classList.toggle('open');
-            });
+            };
+            hideBtn.addEventListener('click', toggleFn);
+            this.eventListeners.push({ el: hideBtn, ev: 'click', fn: toggleFn });
         }
 
-        // Formulaire itinéraire
         const form = document.querySelector('.form-search');
         if (form) {
-            form.addEventListener('submit', (e) => {
+            const searchFn = (e) => {
                 e.preventDefault();
                 const start = document.getElementById('getadress').value;
                 this.calculateRoute(start);
-            });
+            };
+            form.addEventListener('submit', searchFn);
+            this.eventListeners.push({ el: form, ev: 'submit', fn: searchFn });
         }
     }
 
     updateAddressPanel(m) {
         const addrEl = document.querySelector('#address .address');
         const cityEl = document.querySelector('#address .city');
-
         if (addrEl) addrEl.textContent = m.address || '';
         if (cityEl) {
             const cp = m.postcode ? m.postcode + ' ' : '';
@@ -240,10 +244,11 @@ class MagixMaps {
     setupAdminWatcher() {
         const f = this.config.adminFields;
         const inputs = [f.street, f.postcode, f.city, f.country].filter(i => i !== undefined);
-
         inputs.forEach(input => {
+            const fn = () => this.debounceGeocode();
             ['keyup', 'change', 'focusout'].forEach(evt => {
-                input.addEventListener(evt, () => this.debounceGeocode());
+                input.addEventListener(evt, fn);
+                this.eventListeners.push({ el: input, ev: evt, fn: fn });
             });
         });
     }
@@ -253,9 +258,7 @@ class MagixMaps {
         this.timer = setTimeout(async () => {
             const f = this.config.adminFields;
             const address = `${f.street.value}, ${f.postcode.value} ${f.city.value}, ${f.country ? f.country.value : ''}`;
-
             if (address.length < 10) return;
-
             const geocoder = new this.libs.geocoding.Geocoder();
             try {
                 const { results } = await geocoder.geocode({ address: address });
@@ -263,12 +266,43 @@ class MagixMaps {
                     const loc = results[0].geometry.location;
                     f.lat.value = loc.lat();
                     f.lng.value = loc.lng();
-                    // Petit feedback visuel
-                    f.lat.style.transition = 'background 0.3s';
                     f.lat.style.backgroundColor = '#d4edda';
                     setTimeout(() => f.lat.style.backgroundColor = '', 500);
                 }
             } catch (e) { console.warn("Geocoding failed"); }
         }, 1000);
     }
-}
+
+    /**
+     * Nettoyage complet de l'instance
+     */
+    destroy() {
+        console.log("MagixMaps: Destruction de l'instance...");
+
+        // 1. Arrêt du minuteur
+        if (this.timer) clearTimeout(this.timer);
+
+        // 2. Suppression des marqueurs
+        this.markers.forEach(m => m.map = null);
+        this.routeFlags.forEach(f => f.map = null);
+        this.markers = [];
+        this.routeFlags = [];
+
+        // 3. Fermeture de l'InfoWindow
+        if (this.activeInfoWindow) this.activeInfoWindow.close();
+
+        // 4. Nettoyage Directions
+        if (this.directionsRenderer) this.directionsRenderer.setMap(null);
+
+        // 5. Suppression des écouteurs d'événements DOM
+        this.eventListeners.forEach(item => {
+            item.el.removeEventListener(item.ev, item.fn);
+        });
+
+        // 6. Nettoyage du conteneur
+        const el = document.getElementById(this.config.mapId);
+        if (el) el.innerHTML = '';
+
+        this.instance = null;
+    }
+} 

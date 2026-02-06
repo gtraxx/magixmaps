@@ -1,41 +1,75 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <title>MagixMaps - Administration</title>
+    <title>MagixMaps - Administration & Géocodage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <style>
-        body { font-family: sans-serif; padding: 50px; background: #f4f4f4; }
-        .form-admin { background: #fff; padding: 20px; max-width: 500px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .form-admin input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; box-sizing: border-box; }
-        .gps-fields { background: #eef2f3; padding: 10px; border-radius: 4px; display: flex; gap: 10px; }
-        label { font-weight: bold; font-size: 12px; color: #666; }
+        :root { --primary: #2c3e50; }
+        .gps-fields { background: #f8f9fa; padding: 1rem; border-radius: 8px; border: 1px dashed #ccc; }
     </style>
 </head>
 <body>
+<div class="container">
+    <nav>
+        <ul><li><strong>MagixMaps Admin</strong></li></ul>
+        <ul>
+            <li><a href="../index.html" class="secondary">← Accueil</a></li>
+        </ul>
+    </nav>
 
-<div class="form-admin">
-    <h3>Ajouter un lieu</h3>
-    <label>Adresse</label>
-    <input type="text" class="street" placeholder="Ex: 10 rue de la paix">
+    <header>
+        <h2>Mode Administration</h2>
+        <p>Détection automatique des coordonnées GPS lors de la saisie d'une adresse.</p>
+    </header>
 
-    <label>Code Postal / Ville</label>
-    <div style="display:flex; gap:10px;">
-        <input type="text" class="postcode" placeholder="75000">
-        <input type="text" class="city" placeholder="Paris">
-    </div>
+    <article>
+        <div class="grid">
+            <div>
+                <label>Adresse</label>
+                <input type="text" class="street" placeholder="Ex: 10 rue de la paix">
 
-    <label>Coordonnées GPS (Auto-détection)</label>
-    <div class="gps-fields">
-        <input type="text" class="lat" placeholder="Latitude" readonly>
-        <input type="text" class="lng" placeholder="Longitude" readonly>
-    </div>
+                <div class="grid">
+                    <div>
+                        <label>Code Postal</label>
+                        <input type="text" class="postcode" placeholder="75000">
+                    </div>
+                    <div>
+                        <label>Ville</label>
+                        <input type="text" class="city" placeholder="Paris">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>Retour Géocodage (Lecture seule)</label>
+                <div class="gps-fields">
+                    <input type="text" class="lat" placeholder="Latitude" readonly>
+                    <input type="text" class="lng" placeholder="Longitude" readonly>
+                </div>
+                <small>Les champs passent en vert une fois la détection réussie.</small>
+            </div>
+        </div>
+    </article>
+
+    <h3>Code d'implémentation</h3>
+    <pre><code class="language-javascript">new MagixMaps({
+    api_key: 'VOTRE_CLE',
+    adminFields: {
+        street: document.querySelector('.street'),
+        postcode: document.querySelector('.postcode'),
+        city: document.querySelector('.city'),
+        lat: document.querySelector('.lat'),
+        lng: document.querySelector('.lng')
+    }
+});</code></pre>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="../dist/magixmaps.js"></script>
 <script>
-    // Initialisation mode Admin
     new MagixMaps({
-        api_key: '',//VOTRE_CLE_API
+        api_key: '',
         adminFields: {
             street: document.querySelector('.street'),
             postcode: document.querySelector('.postcode'),

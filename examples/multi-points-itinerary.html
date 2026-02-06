@@ -1,109 +1,60 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MagixMaps - Itinéraire Multi-points</title>
-
+    <title>MagixMaps - Multi-points</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <link rel="stylesheet" href="../dist/magixmaps.min.css">
-
     <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f6f7;
-            font-family: sans-serif;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        header {
-            margin-bottom: 20px;
-        }
-        .instructions {
-            background: #fff;
-            padding: 15px;
-            border-radius: 4px;
-            border-left: 4px solid #2c3e50;
-            margin-bottom: 20px;
-        }
+        :root { --mm-main-color: #e67e22; --mm-map-height: 500px; }
     </style>
 </head>
 <body>
-
 <div class="container">
+    <nav>
+        <ul><li><strong>MagixMaps Multi-points</strong></li></ul>
+        <ul>
+            <li><a href="../index.html" class="secondary">← Accueil</a></li>
+        </ul>
+    </nav>
+
     <header>
-        <h1>Points de vente MagixMaps</h1>
-        <p>Sélectionnez un point sur la carte pour voir l'adresse et calculer votre itinéraire.</p>
+        <h2>Réseau de points de vente</h2>
+        <p>La carte ajuste automatiquement son zoom pour inclure tous les marqueurs du tableau.</p>
     </header>
 
-    <div class="instructions">
-        <strong>Mode d'emploi :</strong> Cliquez sur un marqueur pour mettre à jour le panneau, puis saisissez votre ville de départ.
-    </div>
-
-    <div id="magix-maps-container">
-        <div id="main-map" data-map-id="VOTRE_MAP_ID_GOOGLE"></div>
-
+    <article id="magix-maps-container">
+        <div id="main-map" data-map-id="DEMO_MAP_ID"></div>
         <div id="gmap-address" class="open">
-            <form class="form-search">
-                <input type="text" id="getadress" placeholder="Votre ville de départ...">
-                <button type="submit" class="subdirection">OK</button>
-            </form>
-
-            <div class="alert">
-                <div id="address">
-                    <span class="address">Sélectionnez un magasin</span>,
-                    <span class="city"></span>
-                </div>
-                <button id="showform">Itinéraire</button>
-            </div>
-
-            <button class="hidepanel open"></button>
+            <form class="form-search"><input type="text" id="getadress" placeholder="Départ..."></form>
+            <div class="alert"><div id="address">Sélectionnez un point</div></div>
             <div id="r-directions"></div>
         </div>
-    </div>
+    </article>
+
+    <pre><code class="language-javascript">// La bibliothèque utilise fitBounds() automatiquement
+const map = new MagixMaps({
+    markers: [
+        { company: "Huy", lat: 50.52, lng: 5.24 },
+        { company: "Liège", lat: 50.64, lng: 5.57 },
+        { company: "Namur", lat: 50.46, lng: 4.86 }
+    ]
+});</code></pre>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="../dist/magixmaps.js"></script>
-
 <script>
-    // Configuration avec plusieurs points de vente
-    const mapConfig = {
-        api_key: '',//VOTRE_CLE_API_REELLE
-        lang: 'fr',
+    new MagixMaps({
+        api_key: '',
         zoom: 8,
         markers: [
-            {
-                company: "Magix Huy",
-                address: "Rue de la Station",
-                postcode: "4500",
-                city: "Huy",
-                lat: 50.52,
-                lng: 5.24
-            },
-            {
-                company: "Magix Liège",
-                address: "Place Saint-Lambert",
-                postcode: "4000",
-                city: "Liège",
-                lat: 50.64,
-                lng: 5.57
-            },
-            {
-                company: "Magix Namur",
-                address: "Place de la Station",
-                postcode: "5000",
-                city: "Namur",
-                lat: 50.46,
-                lng: 4.86
-            }
+            { company: "Magix Huy", address: "Rue de la Station", city: "Huy", lat: 50.52, lng: 5.24 },
+            { company: "Magix Liège", address: "Place Saint-Lambert", city: "Liège", lat: 50.64, lng: 5.57 },
+            { company: "Magix Namur", address: "Place de la Station", city: "Namur", lat: 50.46, lng: 4.86 }
         ]
-    };
-
-    // Initialisation
-    const myMap = new MagixMaps(mapConfig);
+    });
 </script>
-
 </body>
 </html>

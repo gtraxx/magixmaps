@@ -8,7 +8,6 @@ Initialement développée pour le système Magix CMS, cette version a été isol
 ### version
 
 [![release](https://img.shields.io/github/release/gtraxx/magixmaps.svg)](https://github.com/gtraxx/magixmaps/releases/latest)
-![License](https://img.shields.io/badge/license-MIT%20%2F%20GPL%20v3-blue)
 
 ---
 
@@ -53,40 +52,67 @@ Restrictions : Pour la mise en production, n'oubliez pas de restreindre votre cl
 Utilisé pour afficher des points géographiques avec moteur de calcul d'itinéraire intégré.
 
 ```javascript
+const myAdd = [
+   {
+      company: "Magix Office",
+      address: "Rue de la Station",
+      postcode: "4500",
+      city: "Huy",
+      lat: 50.52, // Type: Number
+      lng: 5.24   // Type: Number
+   }
+];
+
 const map = new MagixMaps({
-    api_key: 'VOTRE_CLE_API_GOOGLE',
-    googleMapId: 'DEMO_MAP_ID',
-    lang: 'fr',
-    zoom: 15,
-    markers: [
-        {
-            company: "Magix Office",
-            address: "Rue de la Station",
-            postcode: "4500",
-            city: "Huy",
-            lat: 50.52,
-            lng: 5.24
-        }
-    ]
+   api_key: 'VOTRE_CLE_API_GOOGLE',
+   googleMapId: 'VOTRE_MAP_ID',
+   lang: 'fr',
+   zoom: 15,
+   markers: myAdd
 });
 ```
+## Structure des données (markers)
+Chaque objet du tableau markers accepte les propriétés suivantes : 
+
+| Propriété | Type | Description |
+| :--- | :--- | :--- |
+| **company** | String | Nom affiché dans la fenêtre d'information (InfoWindow). |
+| **address** | String | Adresse textuelle (utilisée pour l'affichage et l'itinéraire). |
+| **city** | String | Ville de destination. |
+| **lat** | `Number` (float) | Latitude précise (ex: 50.52). **Obligatoire**. |
+| **lng** | `Number` (float) | Longitude précise (ex: 5.24). **Obligatoire**. |
 
 2. Mode Administration (Géocodage automatique)
    Utilisé pour synchroniser en temps réel des champs de formulaire avec les coordonnées GPS.
 
 ```javascript
 new MagixMaps({
-    api_key: 'VOTRE_CLE_API_GOOGLE',
-    googleMapId: 'DEMO_MAP_ID',
-    adminFields: {
-        street: document.querySelector('.input-rue'),
-        postcode: document.querySelector('.input-cp'),
-        city: document.querySelector('.input-ville'),
-        lat: document.querySelector('.input-lat'),
-        lng: document.querySelector('.input-lng')
-    }
+   api_key: 'VOTRE_CLE_API_GOOGLE',
+   googleMapId: 'DEMO_MAP_ID',
+   adminFields: {
+      street: document.querySelector('.input-rue'),
+      postcode: document.querySelector('.input-cp'),
+      city: document.querySelector('.input-ville'),
+      lat: document.querySelector('.input-lat'),
+      lng: document.querySelector('.input-lng')
+   }
 });
 ```
+
+## Gestion du cycle de vie : La méthode destroy()
+Dans les applications web modernes (AJAX, Single Page Applications, ou chargement dynamique de contenu), il est crucial de ne pas laisser de traces en mémoire lorsqu'un composant n'est plus utilisé.
+La méthode `destroy()` permet un nettoyage complet de l'instance pour garantir la performance et la stabilité du navigateur :
+
+* **Libération de la mémoire** : Supprime physiquement tous les marqueurs (Advanced Markers), les itinéraires et les instances de l'API Google Maps.
+* **Nettoyage des événements** : Retire proprement tous les écouteurs d'événements (`Event Listeners`) sur les formulaires et les boutons pour éviter les fuites de mémoire.
+* **Arrêt des processus** : Stoppe instantanément les minuteurs (`timers`) de géocodage en cours pour éviter des requêtes API inutiles en arrière-plan.
+* **Remise à zéro du DOM** : Vide le conteneur HTML de la carte pour le laisser prêt à une nouvelle initialisation.
+```javascript
+const map = new MagixMaps(config);
+// Plus tard...
+map.destroy();
+```
+
 3. Personnalisation graphique
 L'apparence de l'interface est gérée via des variables CSS éditables directement dans votre feuille de style principale ou dans un bloc style :
 

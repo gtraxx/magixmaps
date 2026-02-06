@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagixMaps | Bibliothèque Google Maps Vanilla JS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --primary-hover: #34495e;
+            --accent-color: #3498db;
+        }
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .hero {
+            padding: 5rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid #dee2e6;
+        }
+        .badges { margin-bottom: 1.5rem; }
+        .badges img { margin: 0 5px; height: 20px; }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .feature-card {
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .feature-card i { color: var(--accent-color); font-size: 2rem; margin-bottom: 1rem; }
+
+        pre {
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            position: relative;
+        }
+        .copy-hint { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; opacity: 0.5; }
+
+        .btn-demo { background-color: var(--primary); border: none; padding: 1rem 2rem; font-weight: bold; }
+        .btn-demo:hover { background-color: var(--primary-hover); }
+
+        footer { margin-top: 5rem; padding: 2rem 0; border-top: 1px solid #eee; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="container">
+        <div class="badges">
+            <img src="https://img.shields.io/github/v/release/gtraxx/magixmaps?color=blue" alt="Version">
+            <img src="https://img.shields.io/badge/license-MIT%20%2F%20GPLv3-blue" alt="License">
+            <img src="https://img.shields.io/github/stars/gtraxx/magixmaps?style=social" alt="Stars">
+        </div>
+
+        <h1>MagixMaps</h1>
+        <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto;">
+            La bibliothèque Vanilla JS pour intégrer l'API Google Maps 2026 en toute simplicité.
+            Légère, asynchrone et sans dépendances.
+        </p>
+        <div style="margin-top: 2rem; margin-bottom: 2.5rem; display: flex; justify-content: center; gap: 15px;">
+            <a href="examples/index.html" role="button" class="btn-demo">🚀 Voir la démo</a>
+            <a href="https://github.com/gtraxx/magixmaps" role="button" class="contrast outline">Documentation GitHub</a>
+        </div>
+        <img src="https://github.com/user-attachments/assets/a765cf46-a556-4421-9b38-f093f502f03f"
+             alt="MagixMaps Preview"
+             style="border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); max-width: 100%; height: auto;">
+    </div>
+</header>
+<main class="container">
+    <section class="feature-grid">
+        <div class="feature-card">
+            <i class="fas fa-bolt"></i>
+            <h3>Zéro Dépendance</h3>
+            <p>Écrit en Vanilla JS pur. Pas besoin de jQuery ou de frameworks lourds.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>Advanced Markers</h3>
+            <p>Support natif des éléments de marqueurs avancés Google (v2026).</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-route"></i>
+            <h3>Itinéraires</h3>
+            <p>Moteur de calcul d'itinéraire avec panneaux de direction interactifs.</p>
+        </div>
+    </section>
+    <hr style="margin: 4rem 0;">
+
+    <section id="install">
+        <h2>Installation Rapide</h2>
+        <p>Initialisez votre carte en quelques secondes :</p>
+        <pre>
+<pre><code class="language-javascript">const map = new MagixMaps({
+    api_key: 'VOTRE_CLE_API',
+    googleMapId: 'VOTRE_MAP_ID',
+    markers: [{
+        company: "Mon Entreprise",
+        lat: 50.52,
+        lng: 5.24
+    }]
+    });</code></pre>
+<span class="copy-hint">JS ES6+</span></pre>
+    </section>
+    <section style="margin-top: 4rem; text-align: center;">
+        <article>
+            <h3>Prêt à essayer ?</h3>
+            <p>Consultez l'exemple interactif complet pour voir toutes les fonctionnalités en action.</p>
+            <a href="examples/index.html">Accéder au dossier /examples →</a>
+        </article>
+    </section>
+</main>
+<footer class="container" style="text-align: center;">
+    <p>Propulsé par <a href="https://www.magix-cms.com">Magix CMS</a> | Développé par <a href="https://www.gerits-aurelien.be">Aurélien Gérits</a></p>
+    <p><small>© 2008-2026 - Sous licence MIT / GPL v3</small></p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+</body>
+</html>
