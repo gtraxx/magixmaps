@@ -8,6 +8,15 @@ Initialement développée pour le système Magix CMS, cette version a été isol
 ### version
 
 [![release](https://img.shields.io/github/release/gtraxx/magixmaps.svg)](https://github.com/gtraxx/magixmaps/releases/latest)
+![Version TinyMCE](https://img.shields.io/badge/TinyMCE-6%20%7C%207-blue)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+![Statut](https://img.shields.io/badge/projet-Open%20Source-orange)
+
+## Soutenir le projet
+
+Si vous souhaitez soutenir le développement, vous pouvez faire un don via PayPal :
+
+[![Faire un don](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate/?business=BQBYN3XYGMDML&no_recurring=0&currency_code=EUR)
 
 ### Demo (Attention il n'y a pas de clé API)
 
@@ -136,7 +145,10 @@ Pour un fonctionnement optimal, vérifiez que les services suivants sont activé
 
 Assurez-vous également que votre clé API dispose des restrictions HTTP appropriées pour votre nom de domaine ou votre environnement de développement.
 
-## Licence et Crédits
-Auteur : Aurélien Gérits (Magix CMS)
-Copyright : © 2008-2026 Gerits Aurelien https://www.gerits-aurelien.be
-Licence : Double licence sous MIT ou GPL Version 3.
+## Licence
+
+Ce projet est sous licence **GPLv3**. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Copyright (C) 2008 - 2026 Gerits Aurelien (Magix CMS)
+Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU telle que publiée par la Free Software Foundation ; soit la version 3 de la Licence, ou (à votre discrétion) toute version ultérieure.
+
+---
