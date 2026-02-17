@@ -8,7 +8,6 @@ Initialement développée pour le système Magix CMS, cette version a été isol
 ### version
 
 [![release](https://img.shields.io/github/release/gtraxx/magixmaps.svg)](https://github.com/gtraxx/magixmaps/releases/latest)
-![Version TinyMCE](https://img.shields.io/badge/TinyMCE-6%20%7C%207-blue)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 ![Statut](https://img.shields.io/badge/projet-Open%20Source-orange)
 
