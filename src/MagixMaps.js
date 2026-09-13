@@ -25,11 +25,11 @@ class MagixMaps {
         this.libs = {};
         this.markers = [];
         this.routeFlags = [];
-        this.directionsRenderer = null;
         this.activeInfoWindow = null;
         this.timer = null;
         this.eventListeners = []; // Pour le nettoyage futur
-
+        // 1. Dans le constructor(), remplacez this.directionsRenderer par :
+        this.routePolyline = null;
         // 3. Lancement du chargement
         this.bootstrap();
     }
@@ -150,16 +150,22 @@ class MagixMaps {
     }
 
     createMarkerIcon(label, color = 'main') {
-        const container = document.createElement("div");
-        container.className = "marker-custom-wrapper";
-        const iconUrl = `/${this.config.lang}/gmap/?marker=${color}&dotless=true`;
-        container.innerHTML = `
-            <img src="${iconUrl}" style="display:block;">
-            <span class="marker-label" style="position:absolute; top:12px; left:50%; transform:translateX(-50%); color:white; font-weight:bold; font-size:12px;">${label}</span>
-        `;
-        return container;
+        // Définition des couleurs selon l'argument
+        const bgColor = color === 'main' ? '#2c3e50' : '#95a5a6';
+        const borderColor = color === 'main' ? '#1a252f' : '#7f8c8d';
+
+        // Utilisation de la classe native PinElement de Google
+        const pin = new this.libs.marker.PinElement({
+            glyph: String(label),
+            glyphColor: 'white',
+            background: bgColor,
+            borderColor: borderColor
+        });
+
+        return pin.element;
     }
 
+    // 2. Dans calculateRoute(origin), modifiez la logique de rendu :
     async calculateRoute(origin) {
         if (!origin) return;
         const service = new this.libs.routes.DirectionsService();
@@ -167,12 +173,9 @@ class MagixMaps {
         if (this.routeFlags) this.routeFlags.forEach(f => f.map = null);
         this.routeFlags = [];
 
-        if (!this.directionsRenderer) {
-            this.directionsRenderer = new this.libs.routes.DirectionsRenderer({
-                map: this.instance,
-                panel: document.getElementById('r-directions'),
-                suppressMarkers: true
-            });
+        // Nettoyage de l'ancienne ligne si elle existe
+        if (this.routePolyline) {
+            this.routePolyline.setMap(null);
         }
 
         try {
@@ -182,8 +185,16 @@ class MagixMaps {
                 travelMode: google.maps.TravelMode.DRIVING
             });
 
-            this.directionsRenderer.setDirections(result);
             const leg = result.routes[0].legs[0];
+
+            // Remplacement du DirectionsRenderer par un Polyline classique
+            this.routePolyline = new this.libs.maps.Polyline({
+                path: result.routes[0].overview_path,
+                map: this.instance,
+                strokeColor: '#3498db',
+                strokeWeight: 5,
+                strokeOpacity: 0.8
+            });
 
             const markerA = new this.libs.marker.AdvancedMarkerElement({
                 map: this.instance,
@@ -198,11 +209,15 @@ class MagixMaps {
             });
 
             this.routeFlags.push(markerA, markerB);
+
             const bounds = new this.libs.core.LatLngBounds();
             bounds.extend(leg.start_location);
             bounds.extend(leg.end_location);
             this.instance.fitBounds(bounds);
-            document.getElementById('r-directions').classList.add('sizedirection');
+
+            // Note: Si vous utilisez cette méthode, il faudra masquer ou gérer manuellement
+            // le contenu de document.getElementById('r-directions')
+
         } catch (e) {
             alert("Itinéraire introuvable.");
         }
@@ -291,8 +306,8 @@ class MagixMaps {
         // 3. Fermeture de l'InfoWindow
         if (this.activeInfoWindow) this.activeInfoWindow.close();
 
-        // 4. Nettoyage Directions
-        if (this.directionsRenderer) this.directionsRenderer.setMap(null);
+        // 4. Nettoyage de la ligne d'itinéraire
+        if (this.routePolyline) this.routePolyline.setMap(null);
 
         // 5. Suppression des écouteurs d'événements DOM
         this.eventListeners.forEach(item => {
