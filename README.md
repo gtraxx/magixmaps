@@ -141,7 +141,7 @@ L'apparence de l'interface est gérée via des variables CSS éditables directem
 Pour un fonctionnement optimal, vérifiez que les services suivants sont activés dans votre console Google Cloud :
 * Maps JavaScript API : Nécessaire pour l'affichage de la carte.
 * Geocoding API : Nécessaire pour la conversion d'adresses en coordonnées.
-* Directions API : Nécessaire pour le calcul d'itinéraires.
+* Routes API : Nécessaire pour le calcul d'itinéraires.
 
 Assurez-vous également que votre clé API dispose des restrictions HTTP appropriées pour votre nom de domaine ou votre environnement de développement.
 
