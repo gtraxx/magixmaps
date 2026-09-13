@@ -212,7 +212,7 @@ class MagixMaps {
 
             // 3. Extraction de la route principale
             const route = response.routes[0];
-            const leg = route.legs[0]; // <-- AJOUTEZ CETTE LIGNE ICI
+            const leg = route.legs[0];
 
             // 4. Tracé direct de la ligne bleue
             this.routePolyline = new this.libs.maps.Polyline({
