@@ -68,12 +68,15 @@
     .form-search {
       background: var(--mm-bg-panel);
       display: flex;
+      justify-content: center;
+      align-content: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       border-bottom: 1px solid @border-color;
+      margin-bottom: 0;
 
       input {
         flex: 1;
-        height: var(--mm-form-height);
+        //height: var(--mm-form-height);
         border: none;
         padding: 0 15px;
         font-size: 14px;
@@ -154,12 +157,14 @@
   #r-directions {
     background: var(--mm-bg-panel);
     overflow-y: auto;
-    max-height: 0;
+    max-height: 0; // Au repos
     opacity: 0;
     transition: max-height @transition, opacity @transition;
 
     &.sizedirection {
-      max-height: 400px;
+      // MODIFICATIONS ICI
+      max-height: calc(100vh - (var(--mm-form-height) + var(--mm-alert-height))); // Hauteur max dynamique (taille du panneau parent moins le header)
+      flex: 1; // Permet de remplir l'espace Flex et d'activer l'overflow interne
       opacity: 1;
       border-bottom: 2px solid @border-color;
       padding: 10px;

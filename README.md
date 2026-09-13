@@ -15,7 +15,7 @@ Initialement développée pour le système Magix CMS, cette version a été isol
 
 Si vous souhaitez soutenir le développement, vous pouvez faire un don via PayPal :
 
-[![Faire un don](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate/?business=BQBYN3XYGMDML&no_recurring=0&currency_code=EUR)
+[![Faire un don](https://img.shields.io/badge/Donate-PayPal-blue.svg)](paypal.me/aurelienstireg)
 
 ### Demo (Attention il n'y a pas de clé API)
 
@@ -75,7 +75,7 @@ const myAdd = [
    }
 ];
 
-const map = new MagixMaps({
+const map = new MagixMaps23({
    api_key: 'VOTRE_CLE_API_GOOGLE',
    googleMapId: 'VOTRE_MAP_ID',
    lang: 'fr',
@@ -98,7 +98,7 @@ Chaque objet du tableau markers accepte les propriétés suivantes :
    Utilisé pour synchroniser en temps réel des champs de formulaire avec les coordonnées GPS.
 
 ```javascript
-new MagixMaps({
+new MagixMaps23({
    api_key: 'VOTRE_CLE_API_GOOGLE',
    googleMapId: 'DEMO_MAP_ID',
    adminFields: {
@@ -119,8 +119,9 @@ La méthode `destroy()` permet un nettoyage complet de l'instance pour garantir 
 * **Nettoyage des événements** : Retire proprement tous les écouteurs d'événements (`Event Listeners`) sur les formulaires et les boutons pour éviter les fuites de mémoire.
 * **Arrêt des processus** : Stoppe instantanément les minuteurs (`timers`) de géocodage en cours pour éviter des requêtes API inutiles en arrière-plan.
 * **Remise à zéro du DOM** : Vide le conteneur HTML de la carte pour le laisser prêt à une nouvelle initialisation.
+
 ```javascript
-const map = new MagixMaps(config);
+const map = new MagixMaps23(config);
 // Plus tard...
 map.destroy();
 ```

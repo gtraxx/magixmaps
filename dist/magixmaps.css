@@ -59,12 +59,14 @@
 #magix-maps-container #gmap-address .form-search {
   background: var(--mm-bg-panel);
   display: flex;
+  justify-content: center;
+  align-content: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid var(--mm-border-color);
+  margin-bottom: 0;
 }
 #magix-maps-container #gmap-address .form-search input {
   flex: 1;
-  height: var(--mm-form-height);
   border: none;
   padding: 0 15px;
   font-size: 14px;
@@ -146,7 +148,8 @@
   transition: max-height var(--mm-transition), opacity var(--mm-transition);
 }
 #magix-maps-container #r-directions.sizedirection {
-  max-height: 400px;
+  max-height: calc(100vh - (var(--mm-form-height) + var(--mm-alert-height)));
+  flex: 1;
   opacity: 1;
   border-bottom: 2px solid var(--mm-border-color);
   padding: 10px;

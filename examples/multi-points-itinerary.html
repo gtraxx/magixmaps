@@ -15,26 +15,23 @@
     <nav>
         <ul><li><strong>MagixMaps Multi-points</strong></li></ul>
         <ul>
-            <li><a href="../index.html" class="secondary">← Accueil</a></li>
+            <li><a href="../examples/index.html" class="secondary">← Accueil</a></li>
         </ul>
     </nav>
 
     <header>
         <h2>Réseau de points de vente</h2>
-        <p>La carte ajuste automatiquement son zoom pour inclure tous les marqueurs du tableau.</p>
+        <p>Exemple de Store Locator : La carte ajuste automatiquement son zoom et son centrage pour inclure tous les marqueurs du tableau de données.</p>
     </header>
 
     <article id="magix-maps-container">
+        <!-- On retire le bloc <div id="gmap-address"> pour ne garder que la carte -->
         <div id="main-map" data-map-id="DEMO_MAP_ID"></div>
-        <div id="gmap-address" class="open">
-            <form class="form-search"><input type="text" id="getadress" placeholder="Départ..."></form>
-            <div class="alert"><div id="address">Sélectionnez un point</div></div>
-            <div id="r-directions"></div>
-        </div>
     </article>
 
-    <pre><code class="language-javascript">// La bibliothèque utilise fitBounds() automatiquement
+    <pre><code class="language-javascript">// La bibliothèque utilise fitBounds() automatiquement dès qu'il y a plus d'un marqueur
 const map = new MagixMaps({
+    api_key: 'VOTRE_CLE',
     markers: [
         { company: "Huy", lat: 50.52, lng: 5.24 },
         { company: "Liège", lat: 50.64, lng: 5.57 },
@@ -47,8 +44,7 @@ const map = new MagixMaps({
 <script src="../dist/magixmaps.js"></script>
 <script>
     new MagixMaps({
-        api_key: '',
-        zoom: 8,
+        api_key: 'AIzaSyALw4nJw5z5E18mIW5VvryMByjq8wz7Zj0',
         markers: [
             { company: "Magix Huy", address: "Rue de la Station", city: "Huy", lat: 50.52, lng: 5.24 },
             { company: "Magix Liège", address: "Place Saint-Lambert", city: "Liège", lat: 50.64, lng: 5.57 },

@@ -1,14 +1,10 @@
 /**
  * @copyright MAGIX CMS Copyright (c) 2008-2026 Gerits Aurelien
- * @version 3.0
+ * @version 2.3
  * @name MagixMaps
  * @license Dual licensed under the MIT or GPL Version 3 licenses.
  */
 class MagixMaps {
-    /**
-     * Constructor
-     * @param config
-     */
     constructor(config) {
         // 1. Fusion et options par défaut
         this.config = {
@@ -77,10 +73,6 @@ class MagixMaps {
         this.init();
     }
 
-    /**
-     *
-     * @returns {Promise<void>}
-     */
     async init() {
         try {
             this.libs.maps = await google.maps.importLibrary("maps");
@@ -101,9 +93,6 @@ class MagixMaps {
         }
     }
 
-    /**
-     *
-     */
     setupMap() {
         const el = document.getElementById(this.config.mapId);
         const mapOptions = {
@@ -119,9 +108,6 @@ class MagixMaps {
         this.setupUIEvents();
     }
 
-    /**
-     * renderMarkers
-     */
     renderMarkers() {
         const bounds = new this.libs.core.LatLngBounds();
 
@@ -163,12 +149,6 @@ class MagixMaps {
         }
     }
 
-    /**
-     *
-     * @param label
-     * @param color
-     * @returns {Element | WebAssembly.TableKind}
-     */
     createMarkerIcon(label, color = 'main') {
         // Définition des couleurs selon l'argument
         const bgColor = color === 'main' ? '#2c3e50' : '#95a5a6';
@@ -185,104 +165,61 @@ class MagixMaps {
         return pin.element;
     }
 
-    /**
-     * 2. Dans calculateRoute(origin), modifiez la logique de rendu :
-     * @param origin
-     * @returns {Promise<void>}
-     */
+    // 2. Dans calculateRoute(origin), modifiez la logique de rendu :
     async calculateRoute(origin) {
         if (!origin) return;
+        const service = new this.libs.routes.DirectionsService();
 
-        // 1. Nettoyage de l'ancienne route
         if (this.routeFlags) this.routeFlags.forEach(f => f.map = null);
         this.routeFlags = [];
 
+        // Nettoyage de l'ancienne ligne si elle existe
         if (this.routePolyline) {
             this.routePolyline.setMap(null);
         }
 
         try {
-            // 2. Appel à la nouvelle architecture Routes API (côté JS)
-            const response = await this.libs.routes.Route.computeRoutes({
+            const result = await service.route({
                 origin: origin,
                 destination: this.markers[0].position,
-                travelMode: 'DRIVING',
-                fields: ['*']
+                travelMode: google.maps.TravelMode.DRIVING
             });
 
-            // 3. Extraction de la route principale
-            const route = response.routes[0];
-            const leg = route.legs[0]; // <-- AJOUTEZ CETTE LIGNE ICI
+            const leg = result.routes[0].legs[0];
 
-            // 4. Tracé direct de la ligne bleue
+            // Remplacement du DirectionsRenderer par un Polyline classique
             this.routePolyline = new this.libs.maps.Polyline({
-                path: route.path, // route.path est un tableau d'objets LatLng
+                path: result.routes[0].overview_path,
                 map: this.instance,
                 strokeColor: '#3498db',
                 strokeWeight: 5,
                 strokeOpacity: 0.8
             });
 
-            // NOUVEAU : Extraction sécurisée des coordonnées de départ et d'arrivée
-            const startPos = route.path[0];
-            const endPos = route.path[route.path.length - 1];
-
-            // 5. Placement des marqueurs A et B avec les coordonnées exactes
             const markerA = new this.libs.marker.AdvancedMarkerElement({
                 map: this.instance,
-                position: startPos,
+                position: leg.start_location,
                 content: this.createMarkerIcon('A', 'grey')
             });
 
             const markerB = new this.libs.marker.AdvancedMarkerElement({
                 map: this.instance,
-                position: endPos,
+                position: leg.end_location,
                 content: this.createMarkerIcon('B', 'main')
             });
 
             this.routeFlags.push(markerA, markerB);
 
-            // 6. Recadrage de la carte sur le départ et l'arrivée
             const bounds = new this.libs.core.LatLngBounds();
-            bounds.extend(startPos);
-            bounds.extend(endPos);
+            bounds.extend(leg.start_location);
+            bounds.extend(leg.end_location);
             this.instance.fitBounds(bounds);
 
-            // 7. Génération manuelle des instructions textuelles (Pour remplacer DirectionsRenderer)
-            const directionsPanel = document.getElementById('r-directions');
-            if (directionsPanel && leg.steps) {
-                let html = '<ul class="adp-list">';
-
-                // On boucle sur chaque étape de l'itinéraire renvoyée par Google
-                leg.steps.forEach(step => {
-                    // FALLBACK : On cherche le texte sous toutes ses formes connues (anciennes et nouvelles API)
-                    const instructionText = (step.navigationInstruction && step.navigationInstruction.instructions)
-                        || step.instructions
-                        || step.htmlInstructions;
-
-                    if (instructionText) {
-                        html += `<li class="adp-step">${instructionText}</li>`;
-                    }
-                });
-
-                html += '</ul>';
-
-                // DÉBOGAGE : Si la boucle n'a rien trouvé, on affiche un avertissement
-                if (html === '<ul class="adp-list"></ul>') {
-                    console.warn("Le texte est introuvable. Voici un aperçu de l'objet 'step' renvoyé par Google :", leg.steps[0]);
-                    html = '<div style="padding:15px;">Instructions détaillées non disponibles. (Vérifiez la console)</div>';
-                }
-
-                // On injecte le HTML et on active la classe CSS pour ouvrir le panneau
-                directionsPanel.innerHTML = html;
-                directionsPanel.classList.add('sizedirection');
-            } else {
-                console.warn("Impossible de générer le panneau : directionsPanel introuvable ou leg.steps indéfini.", leg);
-            }
+            // Note: Si vous utilisez cette méthode, il faudra masquer ou gérer manuellement
+            // le contenu de document.getElementById('r-directions')
 
         } catch (e) {
-            console.error("Erreur MagixMaps v3 (Routes API):", e);
-            alert("Itinéraire introuvable ou erreur de l'API Routes.");
+            alert("Itinéraire introuvable.");
         }
     }
 
@@ -309,10 +246,6 @@ class MagixMaps {
         }
     }
 
-    /**
-     * updateAddressPanel
-     * @param m
-     */
     updateAddressPanel(m) {
         const addrEl = document.querySelector('#address .address');
         const cityEl = document.querySelector('#address .city');
@@ -387,4 +320,4 @@ class MagixMaps {
 
         this.instance = null;
     }
-}
+} 
