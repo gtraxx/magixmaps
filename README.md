@@ -15,7 +15,7 @@ Initialement développée pour le système Magix CMS, cette version a été isol
 
 Si vous souhaitez soutenir le développement, vous pouvez faire un don via PayPal :
 
-[![Faire un don](https://img.shields.io/badge/Donate-PayPal-blue.svg)](paypal.me/aurelienstireg)
+[![Faire un don](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/aurelienstireg)
 
 ### Demo (Attention il n'y a pas de clé API)
 
