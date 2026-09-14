@@ -75,7 +75,7 @@ const myAdd = [
    }
 ];
 
-const map = new MagixMaps23({
+const map = new MagixMaps({
    api_key: 'VOTRE_CLE_API_GOOGLE',
    googleMapId: 'VOTRE_MAP_ID',
    lang: 'fr',
@@ -98,7 +98,7 @@ Chaque objet du tableau markers accepte les propriétés suivantes :
    Utilisé pour synchroniser en temps réel des champs de formulaire avec les coordonnées GPS.
 
 ```javascript
-new MagixMaps23({
+new MagixMaps({
    api_key: 'VOTRE_CLE_API_GOOGLE',
    googleMapId: 'DEMO_MAP_ID',
    adminFields: {
@@ -121,7 +121,7 @@ La méthode `destroy()` permet un nettoyage complet de l'instance pour garantir 
 * **Remise à zéro du DOM** : Vide le conteneur HTML de la carte pour le laisser prêt à une nouvelle initialisation.
 
 ```javascript
-const map = new MagixMaps23(config);
+const map = new MagixMaps(config);
 // Plus tard...
 map.destroy();
 ```
